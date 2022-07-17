@@ -31,7 +31,7 @@ public class AuthorizationController {
 
     // Exchange user credentials for json web token.
     @PostMapping("/auth")
-    public ResponseEntity<String> authenticate(HttpServletRequest request, HttpServletResponse response) {
+    public ResponseEntity<Object> authenticate(HttpServletRequest request, HttpServletResponse response) {
         //getting username and password from header.
         String username = request.getHeader("username");
         String password = request.getHeader("password");
