@@ -1,6 +1,7 @@
 package bit.quantum.util;
 
 import bit.quantum.dao.MyUserService;
+import bit.quantum.dto.TokenDTO;
 import bit.quantum.entity.MyUser;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
@@ -34,7 +35,7 @@ public class AuthenticationUtil {
         AuthenticationUtil.passwordEncoder = passwordEncoder;
     }
 
-    public static ResponseEntity<String> authenticate(String username, String password, HttpServletResponse response) {
+    public static ResponseEntity<Object> authenticate(String username, String password, HttpServletResponse response) {
 
         //validating that there are value in credentials
         if (!isCredentialAcceptable(username, password))
@@ -54,10 +55,7 @@ public class AuthenticationUtil {
         // Building a json web token.
         String jwt = buildToken(user, secret);
 
-        // adding token to response header.
-        response.setHeader("Authorization", jwt);
-
-        return new ResponseEntity<>(jwt, HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(new TokenDTO(jwt), HttpStatus.ACCEPTED);
     }
 
     private static String buildToken(MyUser user, String secret) {
@@ -82,7 +80,8 @@ public class AuthenticationUtil {
         String secret = repo.getSecret(username);
         if (!validateToken(token, secret))
             return "token already invalid";
-        repo.updateSecret("invalid", username);
+
+        repo.updateSecret(username,"invalid");
         return "token invalidated";
     }
 
