@@ -57,7 +57,7 @@ public class AuthenticationUtil {
         // adding token to response header.
         response.setHeader("Authorization", jwt);
 
-        return new ResponseEntity<>("authenticated", HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(jwt, HttpStatus.ACCEPTED);
     }
 
     private static String buildToken(MyUser user, String secret) {
