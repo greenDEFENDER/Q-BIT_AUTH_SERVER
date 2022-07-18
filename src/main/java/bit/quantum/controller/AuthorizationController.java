@@ -1,6 +1,7 @@
 package bit.quantum.controller;
 
 import bit.quantum.dao.MyUserService;
+import bit.quantum.dto.TokenDTO;
 import bit.quantum.entity.MyUser;
 import bit.quantum.util.AuthenticationUtil;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -47,7 +48,7 @@ public class AuthorizationController {
 
     // revoke token
     @GetMapping("/revokeToken")
-    public String revokeToken(HttpServletRequest request) {
-        return AuthenticationUtil.revokeToken(request.getHeader("Authorization"));
+    public String revokeToken(@RequestBody TokenDTO tokenDTO) {
+        return AuthenticationUtil.revokeToken(tokenDTO.getAccessToken());
     }
 }
