@@ -35,6 +35,7 @@ public class AuthenticationUtil {
         AuthenticationUtil.passwordEncoder = passwordEncoder;
     }
 
+    //authenticating user
     public static ResponseEntity<Object> authenticate(String username, String password, HttpServletResponse response) {
 
         //validating that there are value in credentials
@@ -108,7 +109,7 @@ public class AuthenticationUtil {
     private static String getUserNameFromJwt(String jwt) {
         int i = jwt.lastIndexOf('.');
         String jwtWithoutSignature = jwt.substring(0, i + 1);
-        Claims untrusted = null;
+        Claims untrusted;
         try {
             // @formatter:off
             untrusted = Jwts.parserBuilder()

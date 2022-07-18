@@ -3,8 +3,11 @@ package bit.quantum.dao;
 import bit.quantum.entity.MyUser;
 import bit.quantum.exception.UseNotFoundException;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 
 import java.util.Optional;
 
@@ -17,7 +20,7 @@ public class MyUserService {
 
     public MyUser findUser(String username) {
         Optional<MyUser> user = repo.findById(username);
-        if (!user.isPresent()) {
+        if (user.isEmpty()) {
             throw new UseNotFoundException("user does not exist");
         }
         return user.get();
@@ -33,8 +36,7 @@ public class MyUserService {
 
     public boolean updateSecret(String username, String secret){
 
-        if( repo.updateSecretByUsername(username,secret)>0)
-            return true;
-        return false;
+        return repo.updateSecretByUsername(username, secret) > 0;
     }
+
 }

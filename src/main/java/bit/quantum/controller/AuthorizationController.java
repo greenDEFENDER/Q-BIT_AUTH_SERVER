@@ -27,7 +27,7 @@ public class AuthorizationController {
         user.setSecret(null);
         user.setPassword(passwordEncoder.encode(user.getPassword()));
         var saveduser = repo.save(user);
-        return new ResponseEntity<MyUser>(saveduser, HttpStatus.CREATED);
+        return new ResponseEntity<>(saveduser, HttpStatus.CREATED);
     }
 
     // Exchange user credentials for json web token.
@@ -50,5 +50,12 @@ public class AuthorizationController {
     @GetMapping("/revokeToken")
     public String revokeToken(@RequestBody TokenDTO tokenDTO) {
         return AuthenticationUtil.revokeToken(tokenDTO.getAccessToken());
+    }
+
+
+    //handling runtime exception.
+    @ExceptionHandler
+    ResponseEntity<Object> handleException(Exception e){
+        return new ResponseEntity<>(e.getMessage(), HttpStatus.BAD_REQUEST);
     }
 }
