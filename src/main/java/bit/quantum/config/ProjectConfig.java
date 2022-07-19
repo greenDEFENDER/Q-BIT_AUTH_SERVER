@@ -31,6 +31,8 @@ public class ProjectConfig {
         http.csrf().disable();
         http.sessionManagement().disable();
         http.authorizeRequests()
+                .mvcMatchers("/secret/**")
+                .hasAuthority("business_server")
                 .anyRequest()
                 .authenticated()
                 .and()
@@ -52,7 +54,12 @@ public class ProjectConfig {
                 .password(passwordEncoder().encode(clientSecret))
                 .authorities("client")
                 .build();
+        UserDetails businessServer = User.withUsername("businessServer")
+                .password(passwordEncoder().encode("businessServer"))
+                .authorities("business_server")
+                .build();
         userDetailsManager.createUser(client);
+        userDetailsManager.createUser(businessServer);
         return userDetailsManager;
     }
 }

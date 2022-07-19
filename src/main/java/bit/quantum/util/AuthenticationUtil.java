@@ -42,8 +42,14 @@ public class AuthenticationUtil {
         if (!isCredentialAcceptable(username, password))
             return new ResponseEntity<>("invalid credentials", HttpStatus.BAD_REQUEST);
 
-        // getting user from database.
-        MyUser user = repo.findUser(username);
+        MyUser user = null;
+        try {
+            // getting user from database.
+            user = repo.findUser(username);
+        } catch (Exception e) {
+            return new ResponseEntity<>("Invalid credentials", HttpStatus.BAD_REQUEST);
+        }
+
 
         // validating user credentials.
         if (!passwordEncoder.matches(password, user.getPassword()))
@@ -82,7 +88,7 @@ public class AuthenticationUtil {
         if (!validateToken(token, secret))
             return "token already invalid";
 
-        repo.updateSecret(username,"invalid");
+        repo.updateSecret(username, "invalid");
         return "token invalidated";
     }
 
