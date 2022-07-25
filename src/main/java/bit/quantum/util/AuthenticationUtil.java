@@ -115,18 +115,19 @@ public class AuthenticationUtil {
     private static String getUserNameFromJwt(String jwt) {
         int i = jwt.lastIndexOf('.');
         String jwtWithoutSignature = jwt.substring(0, i + 1);
-        Claims untrusted;
+        String username;
         try {
             // @formatter:off
-            untrusted = Jwts.parserBuilder()
+           Claims untrusted = Jwts.parserBuilder()
                     .build()
                     .parseClaimsJwt(jwtWithoutSignature)
                     .getBody();
+           username= untrusted.get("username").toString()
             // @formatter:on
         } catch (Exception e) {
             return "invalid";
         }
-        return untrusted.get("username").toString();
+        return username ;
     }
 
     private static boolean isCredentialAcceptable(String username, String password) {
